@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Scratch Emulator</title>
+  <title>Scratch Emulator zonder Forkphorus</title>
   <style>
     body {
       margin: 0;
@@ -12,18 +12,36 @@
       align-items: center;
       height: 100vh;
     }
-    iframe {
-      border: none;
-      width: 480px;
-      height: 360px;
+    canvas {
+      border: 2px solid #444;
+      background-color: #000;
     }
   </style>
 </head>
 <body>
-  <!-- Forkphorus embed met correcte URL naar project.sb3 -->
-  <iframe src="https://forkphorus.github.io/#url=https://cdn.jsdelivr.net/gh/connectedonline/spacedestruct@main/project.sb3&autoplay&hideControls&hideFullscreen"></iframe>
+  <canvas id="scratch-canvas" width="480" height="360"></canvas>
+
+  <!-- Scratch VM en Renderer via CDN -->
+  <script src="https://unpkg.com/scratch-vm/dist/scratch-vm.min.js"></script>
+  <script src="https://unpkg.com/scratch-render/dist/scratch-render.min.js"></script>
+  <script src="https://unpkg.com/scratch-storage/dist/scratch-storage.min.js"></script>
+
+  <script>
+    const canvas = document.getElementById('scratch-canvas');
+    const renderer = new window.RenderWebGL(canvas);
+    const vm = new window.VirtualMachine();
+    const storage = new window.ScratchStorage();
+
+    vm.attachStorage(storage);
+    vm.attachRenderer(renderer);
+    vm.setCompatibilityMode(true);
+    vm.start();
+
+    // Laad lokaal project.sb3 bestand
+    fetch('project.sb3')
+      .then(res => res.arrayBuffer())
+      .then(buffer => vm.loadProject(buffer))
+      .catch(err => console.error('Fout bij laden project.sb3:', err));
+  </script>
 </body>
 </html>
-
-
-
