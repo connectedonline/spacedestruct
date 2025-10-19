@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>SB3 Emulator</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    #scratch-stage {
+      width: 480px;
+      height: 360px;
+      border: 2px solid #444;
+      background-color: #000;
+    }
+  </style>
+</head>
+<body>
+  <div id="scratch-stage"></div>
+
+  <script src="https://unpkg.com/scratch-vm/dist/scratch-vm.min.js"></script>
+  <script src="https://unpkg.com/scratch-render/dist/scratch-render.min.js"></script>
+
+  <script>
+    const vm = new window.VirtualMachine();
+    const canvas = document.createElement('canvas');
+    canvas.width = 480;
+    canvas.height = 360;
+    document.getElementById('scratch-stage').appendChild(canvas);
+
+    const renderer = new window.RenderWebGL(canvas);
+    vm.attachRenderer(renderer);
+    vm.setCompatibilityMode(true);
+    vm.start();
+
+    // Laad lokaal of extern SB3-bestand
+    fetch('project.sb3') // vervang met jouw pad of URL
+      .then(res => res.arrayBuffer())
+      .then(buffer => vm.loadProject(buffer))
+      .catch(err => console.error('Fout bij laden SB3:', err));
+  </script>
+</body>
+</html>
