@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Scratch Emulator zonder Forkphorus</title>
+  <title>Scratch Emulator</title>
   <style>
     body {
       margin: 0;
@@ -25,15 +25,18 @@
   <script src="https://unpkg.com/scratch-vm/dist/scratch-vm.min.js"></script>
   <script src="https://unpkg.com/scratch-render/dist/scratch-render.min.js"></script>
   <script src="https://unpkg.com/scratch-storage/dist/scratch-storage.min.js"></script>
+  <script src="https://unpkg.com/scratch-audio/dist/scratch-audio.min.js"></script>
 
   <script>
     const canvas = document.getElementById('scratch-canvas');
     const renderer = new window.RenderWebGL(canvas);
     const vm = new window.VirtualMachine();
     const storage = new window.ScratchStorage();
+    const audioEngine = new window.AudioEngine();
 
     vm.attachStorage(storage);
     vm.attachRenderer(renderer);
+    vm.attachAudioEngine(audioEngine);
     vm.setCompatibilityMode(true);
     vm.start();
 
